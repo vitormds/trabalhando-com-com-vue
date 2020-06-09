@@ -30,12 +30,12 @@
                 <button v-on:click="addComment" type="submit" class="btn btn-primary">Comentar</button>
             </div>
                 <div class="list-group">
-                    <div class="list-group-item" v-for="comment in comments">
+                    <div class="list-group-item" v-for="(comment,index) in allComments">
                         <span class="comment__author">Autor: <strong>{{ comment.name }}</strong></span>
                  
                     <p>{{ comment.message }}</p>
                     <div>
-                        <a href="#" title="Excluir">Excluir</a>
+                        <a href="#" v-on:click.prevent="removeComments(index)" title="Excluir">Excluir</a>
                     </div>
                   </div>
             </div>
@@ -57,8 +57,23 @@
                       });
                       this.name = '';
                       this.message = '';
-                  }  
+                  } ,
+                  removeComments(index){
+                    this.comments.splice(index, 1);
+                    }
+                }, computed:{
+                    allComments(){
+                        return this.comments.map(comment =>({
+                        ...comment,
+                    name: comment.name.trim() === '' ? 'Anônimo' : comment.name
+                    }))
                 }
+              },
+              watch:{
+                  comments(val){
+                    console.log('val', val)
+                  }
+              }
             })
         </script>
     </body>
